@@ -17,10 +17,8 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Build Windows .exe
-        env:
-          # 代码签名（可选）：在仓库 Secrets 配置后自动启用
-          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+        # 默认产出未签名 exe。需要签名时在仓库 Secrets 配 WIN_CSC_LINK /
+        # WIN_CSC_KEY_PASSWORD，并在此处补回对应 env（空值会导致路径解析报错）。
         run: npx electron-builder --win nsis --x64 --publish never
       - uses: actions/upload-artifact@v4
         with:
@@ -31,6 +29,7 @@ jobs:
 
   mac:
     strategy:
+      fail-fast: false   # 一个架构失败不取消另一个，便于分别拿产物/排错
       matrix:
         include:
           - os: macos-13   # Intel
@@ -47,13 +46,12 @@ jobs:
       - run: npm ci
       - name: Build Mac .dmg (${{ matrix.arch }})
         env:
-          # 未配置证书时跳过签名；配置以下 Secrets 后自动签名+公证
-          CSC_IDENTITY_AUTO_DISCOVERY: ${{ secrets.MAC_CSC_LINK != '' }}
-          CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # 默认产出未签名 dmg（可靠）。空的 CSC_LINK 会被 electron-builder 当成
+          # 文件路径解析而报 "not a file"，故此处不传空证书变量，只关掉签名发现。
+          # 需要签名+公证时：配置 MAC_CSC_LINK / MAC_CSC_KEY_PASSWORD / APPLE_ID /
+          # APPLE_APP_SPECIFIC_PASSWORD / APPLE_TEAM_ID 这几个 Secrets，并把下面
+          # CSC_IDENTITY_AUTO_DISCOVERY 改为 true、补回对应 env。
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: npx electron-builder --mac dmg --${{ matrix.arch }} --publish never
       - uses: actions/upload-artifact@v4
         with:
