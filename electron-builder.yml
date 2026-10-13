@@ -1,0 +1,41 @@
+appId: com.batch.localdoctoolbox
+productName: 本地批量文档工具箱
+copyright: Copyright © 2026
+directories:
+  output: release
+  buildResources: build
+files:
+  - src/**/*
+  - package.json
+  - "!**/*.map"
+asarUnpack:
+  - "**/node_modules/sharp/**"
+  - "**/node_modules/@img/**"
+  - "**/node_modules/tesseract.js/**"
+  - "**/node_modules/tesseract.js-core/**"
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: ${productName}-${version}-win-x64.${ext}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 本地批量文档工具箱
+mac:
+  category: public.app-category.productivity
+  target:
+    - target: dmg
+      arch:
+        - universal
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  # 上架前需配置签名与公证（见 README 风险说明）
+dmg:
+  title: 本地批量文档工具箱
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}

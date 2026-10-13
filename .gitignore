@@ -1,0 +1,8 @@
+node_modules/
+release/
+test/out/
+test/samples/
+*.log
+.DS_Store
+# Tesseract OCR 运行时下载的语言模型缓存
+*.traineddata

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>本地批量文档工具箱</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar">
+      <div class="brand">
+        <div class="logo">📦</div>
+        <div class="brand-text">
+          <div class="brand-title">本地批量文档工具箱</div>
+          <div class="brand-sub">全部本地运算 · 不上传网络</div>
+        </div>
+      </div>
+      <nav id="nav"></nav>
+      <div class="privacy">🔒 文件仅在本机处理</div>
+    </aside>
+
+    <main id="main">
+      <header id="feature-header">
+        <h1 id="feature-title">欢迎使用</h1>
+        <p id="feature-desc">从左侧选择一个功能开始批量处理。</p>
+      </header>
+      <section id="feature-body"></section>
+    </main>
+  </div>
+
+  <div id="toast"></div>
+  <script src="features.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
